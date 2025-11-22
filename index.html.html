@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Notas - INSTITUTO ATSI</title>
+
+<style>
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        padding: 30px;
+        background: linear-gradient(145deg, #b30000, #400000, #000000);
+        background-size: 200% 200%;
+        animation: fondoMovimiento 12s ease infinite;
+        min-height: 100vh;
+    }
+
+    @keyframes fondoMovimiento {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .container {
+        max-width: 900px;
+        margin: auto;
+        background-color: #ffffffcc;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(6px);
+    }
+
+    h1, h2 {
+        text-align: center;
+        color: #222;
+    }
+
+    h3 {
+        background-color: #800000;
+        color: #fff;
+        padding: 8px 10px;
+        border-radius: 5px;
+        margin-top: 25px;
+        text-align: center;
+    }
+
+    /* PANTALLA INICIO */
+    .menu-inicio {
+        text-align: center;
+        padding: 50px 20px;
+    }
+
+    .menu-inicio h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+    }
+
+    .menu-inicio h2 {
+        color: #666;
+        margin-bottom: 50px;
+    }
+
+    .btn-menu {
+        display: inline-block;
+        width: 250px;
+        padding: 20px;
+        margin: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+        color: white;
+    }
+
+    .btn-admin {
+        background-color: #800000;
+    }
+
+    .btn-admin:hover {
+        background-color: #4d0000;
+        transform: scale(1.05);
+    }
+
+    .btn-estudiante {
+        background-color: #006400;
+    }
+
+    .btn-estudiante:hover {
+        background-color: #004d00;
+        transform: scale(1.05);
+    }
+
+    /* LOGIN */
+    .login-box {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .login-box input {
+        width: 100%;
+        padding: 12px;
+        margin: 10px 0;
+        border: 2px solid #999;
+        border-radius: 6px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 15px;
+        margin-top: 20px;
+        background-color: #800000;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-login:hover {
+        background-color: #4d0000;
+    }
+
+    .btn-volver {
+        width: auto;
+        padding: 10px 30px;
+        margin-top: 15px;
+        background-color: #666;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .btn-volver:hover {
+        background-color: #444;
+    }
+
+    /* BUSCADOR */
+    .buscador {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+        border: 2px solid #800000;
+    }
+
+    .buscador h3 {
+        margin-top: 0;
+        background-color: transparent;
+        color: #800000;
+        text-align: left;
+    }
+
+    .buscador-flex {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+    }
+
+    .buscador-flex input {
+        flex: 1;
+    }
+
+    .btn-buscar {
+        width: auto;
+        padding: 10px 30px;
+        margin: 0;
+        background-color: #006400;
+    }
+
+    .btn-buscar:hover {
+        background-color: #004d00;
+    }
+
+    .btn-limpiar {
+        width: auto;
+        padding: 10px 30px;
+        margin: 0;
+        background-color: #666;
+    }
+
+    .btn-limpiar:hover {
+        background-color: #444;
+    }
+
+    .btn-cerrar-sesion {
+        float: right;
+        padding: 10px 20px;
+        background-color: #cc0000;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .btn-cerrar-sesion:hover {
+        background-color: #990000;
+    }
+
+    label {
+        font-weight: 600;
+        display: block;
+        margin-top: 12px;
+        color: #222;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #999;
+        border-radius: 6px;
+        margin-top: 5px;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        background-color: #800000;
+        color: white;
+        border: none;
+        padding: 15px;
+        margin-top: 25px;
+        border-radius: 6px;
+        font-size: 18px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background-color: #4d0000;
+    }
+
+    #mensaje {
+        text-align: center;
+        margin-top: 15px;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .anio {
+        border: 2px solid #800000;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 20px;
+        background-color: #ffffffdd;
+    }
+
+    .materia {
+        margin-left: 15px;
+        margin-bottom: 10px;
+    }
+
+    .materia-readonly {
+        background-color: #f9f9f9;
+        padding: 10px;
+        border-left: 3px solid #800000;
+        margin-bottom: 8px;
+    }
+
+    .materia-readonly strong {
+        color: #800000;
+    }
+
+    .exito {
+        color: green;
+    }
+
+    .error {
+        color: red;
+    }
+
+    .info {
+        color: #0066cc;
+    }
+
+    .oculto {
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- ============================== -->
+    <!-- PANTALLA INICIO -->
+    <!-- ============================== -->
+    <div id="pantallaInicio" class="menu-inicio">
+        <h1>📚 INSTITUTO ATSI</h1>
+        <h2>Sistema de Gestión de Notas</h2>
+        
+        <button class="btn-menu btn-admin" onclick="mostrarLoginAdmin()">
+            🔐 Acceso Administrador
+        </button>
+        
+        <button class="btn-menu btn-estudiante" onclick="mostrarLoginEstudiante()">
+            👨‍🎓 Consultar Mis Notas
+        </button>
+    </div>
+
+    <!-- ============================== -->
+    <!-- LOGIN ADMINISTRADOR -->
+    <!-- ============================== -->
+    <div id="loginAdmin" class="login-box oculto">
+        <h1>🔐 Acceso Administrador</h1>
+        <input type="text" id="usuarioAdmin" placeholder="Usuario">
+        <input type="password" id="passwordAdmin" placeholder="Contraseña">
+        <button class="btn-login" onclick="validarAdmin()">Ingresar</button>
+        <p id="mensajeLoginAdmin" class="error"></p>
+        <button class="btn-volver" onclick="volverInicio()">← Volver</button>
+    </div>
+
+    <!-- ============================== -->
+    <!-- LOGIN ESTUDIANTE -->
+    <!-- ============================== -->
+    <div id="loginEstudiante" class="login-box oculto">
+        <h1>👨‍🎓 Consultar Notas</h1>
+        <p>Ingrese su número de carnet completo<br>(Ejemplo: 12345678 SI)</p>
+        <input type="text" id="carnetEstudiante" placeholder="Ej: 12345678 SI">
+        <button class="btn-login" onclick="consultarNotas()">Ver Mis Notas</button>
+        <p id="mensajeLoginEstudiante"></p>
+        <button class="btn-volver" onclick="volverInicio()">← Volver</button>
+    </div>
+
+    <!-- ============================== -->
+    <!-- PANEL ADMINISTRADOR -->
+    <!-- ============================== -->
+    <div id="panelAdmin" class="oculto">
+        <button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar Sesión</button>
+        <h1>Registro de Notas</h1>
+        <h2>INSTITUTO ATSI - Administrador</h2>
+
+        <!-- BUSCADOR -->
+        <div class="buscador">
+            <h3>🔍 Buscar Estudiante</h3>
+            <div class="buscador-flex">
+                <div style="flex: 1;">
+                    <label for="buscarCarnet">Carnet (CI):</label>
+                    <input type="text" id="buscarCarnet" placeholder="Ingrese el carnet para buscar...">
+                </div>
+                <button class="btn-buscar" onclick="buscarEstudiante()">Buscar</button>
+                <button class="btn-limpiar" onclick="limpiarFormulario()">Limpiar</button>
+            </div>
+            <p id="mensajeBusqueda"></p>
+        </div>
+
+        <!-- FORMULARIO -->
+        <form id="notaForm">
+            <label for="carnet">Carnet (CI): *</label>
+            <input type="text" id="carnet" required>
+
+            <label for="nombre">Nombre del estudiante: *</label>
+            <input type="text" id="nombre" required>
+
+            <label for="apellido">Apellido: *</label>
+            <input type="text" id="apellido" required>
+
+            <label for="carrera">Carrera: *</label>
+            <select id="carrera" required>
+                <option value="">Seleccione una carrera</option>
+                <option value="sistemas">Sistemas Informáticos</option>
+                <option value="secretariado">Secretariado Ejecutivo</option>
+                <option value="contaduria">Contaduría General</option>
+                <option value="administracion">Administración de Empresas</option>
+            </select>
+
+            <!-- CONTENEDOR PARA MATERIAS -->
+            <div id="contenedorMaterias"></div>
+
+            <button type="submit">Guardar Registro</button>
+            <p id="mensaje"></p>
+        </form>
+    </div>
+
+    <!-- ============================== -->
+    <!-- PANEL ESTUDIANTE (VER NOTAS) -->
+    <!-- ============================== -->
+    <div id="panelEstudiante" class="oculto">
+        <button class="btn-cerrar-sesion" onclick="cerrarSesion()">Cerrar Sesión</button>
+        <h1>Mis Notas</h1>
+        <div id="datosEstudiante"></div>
+    </div>
+
+</div>
+
+<!-- ============================== -->
+<!-- SCRIPT PRINCIPAL -->
+<!-- ============================== -->
+<script type="module">
+
+// ---------------------------
+// MATERIAS POR CARRERA
+// ---------------------------
+const materias = {
+    sistemas: {
+        primero: [
+            "Matemáticas para la Informática",
+            "Programación 1",
+            "Inglés Técnico",
+            "Hardware de Computadoras",
+            "Taller de Sistemas Operativos",
+            "Informática y Tecnología Multimedia",
+            "Diseño y Programación 1"
+        ],
+        segundo: [
+            "Estadística",
+            "Programación 2",
+            "Estructura de Datos",
+            "Redes de Computadoras 1",
+            "Programación para Dispositivos Móviles 1",
+            "Análisis y Diseño de Sistemas 1",
+            "Diseño y Programación Web 2",
+            "Base de Datos 1"
+        ],
+        tercero: [
+            "Emprendimiento Productivo",
+            "Diseño y Programación Web 3",
+            "Gestión y Mejoramiento de la Calidad de Software",
+            "Redes de Computadoras 2",
+            "Taller de Modalidad de Graduación",
+            "Análisis y Diseño de Sistemas 2",
+            "Programación para Dispositivos Móviles 2",
+            "Base de Datos 2"
+        ]
+    },
+    secretariado: {
+        primero: [
+            "Gestión Secretarial 1",
+            "Gramática Normativa",
+            "Redacción y Correspondencia 1",
+            "Ofimática 1",
+            "Documentos Mercantiles",
+            "Archivística Física y Digital",
+            "Idioma Originario 1",
+            "Mecanografía Computarizada",
+            "Inglés Comercial 1"
+        ],
+        segundo: [
+            "Gestión Secretarial 2",
+            "Inglés Comercial 2",
+            "Redacción y Correspondencia 2",
+            "Ofimática 2",
+            "Contabilidad 1",
+            "Relaciones Humanas y Ética Profesional",
+            "Idioma Originario 2",
+            "Gestión Documental y Archivo"
+        ],
+        tercero: [
+            "Administración Organizacional y Medio Ambiente",
+            "Inglés Empresarial",
+            "Redacción y Correspondencia 3",
+            "Taller de Modalidad de Graduación",
+            "Contabilidad 2",
+            "Relaciones Públicas y Organización de Eventos"
+        ]
+    },
+    contaduria: {
+        primero: [
+            "Contabilidad 1",
+            "Matemática Financiera",
+            "Informática Contable",
+            "Administración General",
+            "Legislación Laboral y Seguridad Social Aplicada",
+            "Economía General",
+            "Documentos Comerciales y Mercantiles",
+            "Estadística Aplicada",
+            "Inglés Técnico"
+        ],
+        segundo: [
+            "Contabilidad 2",
+            "Contabilidad de Costos 1",
+            "Contabilidad de Sociedades",
+            "Contabilidad de Seguros",
+            "Contabilidad Bancaria y Cooperativa",
+            "Emprendimiento Productivo",
+            "Sistema Tributario"
+        ],
+        tercero: [
+            "Contabilidad Agropecuaria",
+            "Contabilidad de Costos 2",
+            "Contabilidad Gubernamental",
+            "Contabilidad Extractiva (Minera, Petrolera y Forestal)",
+            "Contabilidad de Servicios (Construcción, Hotelera)",
+            "Gabinete Contable Informático",
+            "Análisis e Interpretación de Estados Financieros",
+            "Taller de Modalidad de Graduación"
+        ]
+    },
+    administracion: {
+        primero: [
+            "Fundamentos de Administración",
+            "Contabilidad General para Administradores",
+            "Matemática Financiera",
+            "Estadística para los Negocios",
+            "Práctica Laboral y Tributaria",
+            "Informática Empresarial",
+            "Inglés Técnico"
+        ],
+        segundo: [
+            "Organización de la Administración",
+            "Investigación y Estrategias de Mercado",
+            "Administración de Operaciones",
+            "Gestión del Talento Humano",
+            "Administración Financiera 1",
+            "Preparación y Evaluación de Proyectos",
+            "Administración de Costos y Presupuestos",
+            "Economía de la Empresa"
+        ],
+        tercero: [
+            "Administración de Micro, Pequeña y Mediana Empresa",
+            "Incubación y Modelos de Negocios",
+            "Administración Financiera 2",
+            "Taller de Modalidad de Graduación",
+            "Emprendimiento Productivo",
+            "Comercio Internacional",
+            "Gestión Estratégica"
+        ]
+    }
+};
+
+const nombresCarreras = {
+    sistemas: "Sistemas Informáticos",
+    secretariado: "Secretariado Ejecutivo",
+    contaduria: "Contaduría General",
+    administracion: "Administración de Empresas"
+};
+
+// ---------------------------
+// FIREBASE
+// ---------------------------
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+import { getDatabase, ref, set, get } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-database.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAEriEu3Cfax4XilqNiAA4sAvNQTWAYXxA",
+    authDomain: "notas-mensuales.firebaseapp.com",
+    databaseURL: "https://notas-mensuales-default-rtdb.firebaseio.com",
+    projectId: "notas-mensuales",
+    storageBucket: "notas-mensuales.firebasestorage.app",
+    messagingSenderId: "107854417715",
+    appId: "1:107854417715:web:a2014d6f89fb87a67c7846",
+    measurementId: "G-LXLE1YH68S"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ---------------------------
+// NAVEGACIÓN ENTRE PANTALLAS
+// ---------------------------
+window.mostrarLoginAdmin = function() {
+    document.getElementById("pantallaInicio").classList.add("oculto");
+    document.getElementById("loginAdmin").classList.remove("oculto");
+}
+
+window.mostrarLoginEstudiante = function() {
+    document.getElementById("pantallaInicio").classList.add("oculto");
+    document.getElementById("loginEstudiante").classList.remove("oculto");
+}
+
+window.volverInicio = function() {
+    document.getElementById("pantallaInicio").classList.remove("oculto");
+    document.getElementById("loginAdmin").classList.add("oculto");
+    document.getElementById("loginEstudiante").classList.add("oculto");
+    document.getElementById("panelAdmin").classList.add("oculto");
+    document.getElementById("panelEstudiante").classList.add("oculto");
+    
+    // Limpiar campos
+    document.getElementById("usuarioAdmin").value = "";
+    document.getElementById("passwordAdmin").value = "";
+    document.getElementById("carnetEstudiante").value = "";
+    document.getElementById("mensajeLoginAdmin").innerHTML = "";
+    document.getElementById("mensajeLoginEstudiante").innerHTML = "";
+}
+
+window.cerrarSesion = function() {
+    volverInicio();
+    limpiarFormulario();
+}
+
+// ---------------------------
+// VALIDAR LOGIN ADMIN
+// ---------------------------
+window.validarAdmin = function() {
+    const usuario = document.getElementById("usuarioAdmin").value;
+    const password = document.getElementById("passwordAdmin").value;
+    const mensaje = document.getElementById("mensajeLoginAdmin");
+
+    if (usuario === "ADMIATSI" && password === "atsi2025") {
+        document.getElementById("loginAdmin").classList.add("oculto");
+        document.getElementById("panelAdmin").classList.remove("oculto");
+        mensaje.innerHTML = "";
+    } else {
+        mensaje.innerHTML = "❌ Usuario o contraseña incorrectos";
+    }
+}
+
+// ---------------------------
+// CONSULTAR NOTAS ESTUDIANTE
+// ---------------------------
+window.consultarNotas = async function() {
+    const carnet = document.getElementById("carnetEstudiante").value.trim();
+    const mensaje = document.getElementById("mensajeLoginEstudiante");
+
+    if (!carnet) {
+        mensaje.innerHTML = '<span class="error">⚠️ Por favor ingrese su carnet</span>';
+        return;
+    }
+
+    mensaje.innerHTML = '<span class="info">🔍 Buscando...</span>';
+
+    try {
+        const snapshot = await get(ref(db, "notas/" + carnet));
+
+        if (snapshot.exists()) {
+            const datos = snapshot.val();
+            mostrarNotasEstudiante(datos);
+            document.getElementById("loginEstudiante").classList.add("oculto");
+            document.getElementById("panelEstudiante").classList.remove("oculto");
+        } else {
+            mensaje.innerHTML = '<span class="error">❌ No se encontraron notas con ese carnet</span>';
+        }
+    } catch (error) {
+        mensaje.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
+    }
+}
+
+// ---------------------------
+// MOSTRAR NOTAS ESTUDIANTE
+// ---------------------------
+function mostrarNotasEstudiante(datos) {
+    const contenedor = document.getElementById("datosEstudiante");
+    
+    let html = `
+        <div style="background-color: #f0f0f0; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+            <h2 style="margin-top: 0; color: #800000;">📋 Información Personal</h2>
+            <p><strong>Carnet:</strong> ${datos.carnet}</p>
+            <p><strong>Nombre:</strong> ${datos.nombre} ${datos.apellido}</p>
+            <p><strong>Carrera:</strong> ${nombresCarreras[datos.carrera]}</p>
+        </div>
+        <h2 style="color: #800000; text-align: center;">📚 Mis Notas</h2>
+    `;
+
+    const materiasCarrera = materias[datos.carrera];
+    
+    Object.keys(materiasCarrera).forEach(anio => {
+        html += `
+            <div class="anio">
+                <h3>${anio.charAt(0).toUpperCase() + anio.slice(1)} Año</h3>
+        `;
+
+        materiasCarrera[anio].forEach(mat => {
+            const id = mat.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
+            const nota = datos.notas && datos.notas[id] !== null && datos.notas[id] !== undefined 
+                ? datos.notas[id] 
+                : "Sin nota";
+            
+            html += `
+                <div class="materia-readonly">
+                    <strong>${mat}:</strong> ${nota}
+                </div>
+            `;
+        });
+
+        html += `</div>`;
+    });
+
+    contenedor.innerHTML = html;
+}
+
+// ---------------------------
+// GENERAR MATERIAS ADMIN
+// ---------------------------
+document.getElementById("carrera").addEventListener("change", function () {
+    const carrera = this.value;
+    const contenedor = document.getElementById("contenedorMaterias");
+    contenedor.innerHTML = "";
+
+    if (!materias[carrera]) return;
+
+    Object.keys(materias[carrera]).forEach(anio => {
+        const div = document.createElement("div");
+        div.classList.add("anio");
+
+        div.innerHTML = `<h3>${anio.charAt(0).toUpperCase() + anio.slice(1)} Año</h3>`;
+
+        materias[carrera][anio].forEach(mat => {
+            const id = mat.replace(/[^a-zA-Z0-9]/g, "_").toLowerCase();
+
+            div.innerHTML += `
+                <div class="materia">
+                    <label>${mat}:</label>
+                    <input type="number" step="0.01" min="0" max="100" id="${id}" placeholder="Dejar vacío si no tiene nota">
+                </div>
+            `;
+        });
+
+        contenedor.appendChild(div);
+    });
+});
+
+// ---------------------------
+// BUSCAR ESTUDIANTE (ADMIN)
+// ---------------------------
+window.buscarEstudiante = async function() {
+    const carnetBuscar = document.getElementById("buscarCarnet").value.trim();
+    const mensajeBusqueda = document.getElementById("mensajeBusqueda");
+
+    if (!carnetBuscar) {
+        mensajeBusqueda.innerHTML = '<span class="error">⚠️ Por favor ingrese un carnet</span>';
+        return;
+    }
+
+    mensajeBusqueda.innerHTML = '<span class="info">🔍 Buscando...</span>';
+
+    try {
+        const snapshot = await get(ref(db, "notas/" + carnetBuscar));
+
+        if (snapshot.exists()) {
+            const datos = snapshot.val();
+            
+            document.getElementById("carnet").value = datos.carnet;
+            document.getElementById("nombre").value = datos.nombre;
+            document.getElementById("apellido").value = datos.apellido;
+            document.getElementById("carrera").value = datos.carrera;
+
+            document.getElementById("carrera").dispatchEvent(new Event('change'));
+
+            setTimeout(() => {
+                if (datos.notas) {
+                    Object.keys(datos.notas).forEach(materia => {
+                        const input = document.getElementById(materia);
+                        if (input && datos.notas[materia] !== null) {
+                            input.value = datos.notas[materia];
+                        }
+                    });
+                }
+                mensajeBusqueda.innerHTML = '<span class="exito">✅ Estudiante encontrado. Puede editar sus datos.</span>';
+            }, 100);
+
+        } else {
+            mensajeBusqueda.innerHTML = '<span class="error">❌ No se encontró estudiante con ese carnet</span>';
+        }
+    } catch (error) {
+        mensajeBusqueda.innerHTML = '<span class="error">❌ Error al buscar: ' + error.message + '</span>';
+    }
+}
+
+// ---------------------------
+// LIMPIAR FORMULARIO
+// ---------------------------
+window.limpiarFormulario = function() {
+    document.getElementById("notaForm").reset();
+    document.getElementById("buscarCarnet").value = "";
+    document.getElementById("contenedorMaterias").innerHTML = "";
+    document.getElementById("mensaje").innerHTML = "";
+    document.getElementById("mensajeBusqueda").innerHTML = "";
+}
+
+// ---------------------------
+// GUARDAR REGISTRO
+// ---------------------------
+document.getElementById("notaForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const mensaje = document.getElementById("mensaje");
+    const carnet = document.getElementById("carnet").value.trim();
+    const nombre = document.getElementById("nombre").value.trim();
+    const apellido = document.getElementById("apellido").value.trim();
+    const carrera = document.getElementById("carrera").value;
+
+    if (!carnet || !nombre || !apellido || !carrera) {
+        mensaje.innerHTML = '<span class="error">❌ Complete todos los campos obligatorios (*)</span>';
+        return;
+    }
+
+    const notas = {};
+    document.querySelectorAll("#contenedorMaterias input").forEach(input => {
+        const valor = input.value.trim();
+        notas[input.id] = valor !== "" ? parseFloat(valor) : null;
+    });
+
+    const datos = { carnet, nombre, apellido, carrera, notas };
+
+    mensaje.innerHTML = '<span class="info">💾 Guardando...</span>';
+
+    try {
+        await set(ref(db, "notas/" + carnet), datos);
+        mensaje.innerHTML = '<span class="exito">✔ Registro guardado correctamente</span>';
+        
+        setTimeout(() => {
+            limpiarFormulario();
+        }, 3000);
+    } catch (error) {
+        mensaje.innerHTML = '<span class="error">❌ Error: ' + error.message + '</span>';
+    }
+});
+
+</script>
+
+</body>
+</html>
